@@ -24,15 +24,17 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f040000;
-        public static final int input_msg_hint=0x7f040004;
+        public static final int bt_enable_failed=0x7f040003;
         /**  bluetooth error message /
          */
-        public static final int no_bt_error=0x7f040001;
+        public static final int bt_not_found=0x7f040001;
+        public static final int exit=0x7f040005;
+        public static final int input_msg_hint=0x7f040006;
         /**  generic strings 
          */
-        public static final int ok=0x7f040003;
-        public static final int send_btn_text=0x7f040005;
-        public static final int unknown_bt_error=0x7f040002;
+        public static final int ok=0x7f040004;
+        public static final int send_btn_text=0x7f040007;
+        public static final int unknown_error=0x7f040002;
     }
     public static final class style {
         /** 

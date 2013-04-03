@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -11,22 +12,61 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
-	private enum BTErrorType {NO_BT_FOUND};
+	private enum ArcnsError {NO_BT_FOUND, UNKNOWN};
+
+	public final int REQUEST_ENABLE_BT = 1;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.activity_main);
-		
+
 		// initialize BlueTooth
 		initBluetooth();
+	}
+	
+	// called when activity for result finishes
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		switch (requestCode)
+		{
+			case REQUEST_ENABLE_BT:
+				// If BT isn't enabled ask again, if dialog is canceled then exit
+				if ( resultCode != Activity.RESULT_OK ) {
+					String message = getString(R.string.bt_enable_failed);
+					AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
+					final MainActivity myself = this;
+					dlgAlert.setTitle(getString(R.string.app_name));
+					dlgAlert.setMessage(message);
+					dlgAlert.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+							startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+						}
+					});
+					dlgAlert.setNegativeButton(getString(R.string.exit), new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+							myself.finish();
+						}
+					});
+					dlgAlert.show();
+				}
+				break;
+		}
 	}
 		
 	protected void initBluetooth() {
 		// Initialize the BlueTooth
 		BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
 		if ( btAdapter == null ) {	
-			displayBTError(BTErrorType.NO_BT_FOUND);
+			fatalError(ArcnsError.NO_BT_FOUND);
 			return;
+		}
+		
+		// Enable BlueTooth if it is off
+		if ( !btAdapter.isEnabled() ) {
+			Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);			
 		}
 	}
 	
@@ -47,15 +87,16 @@ public class MainActivity extends Activity {
 	}
 	
 
-	protected void displayBTError(BTErrorType type) {
+	/** Display message then exit app */
+	protected void fatalError(ArcnsError type) {
 		String message = "Error: ";
 		switch(type)
 		{
 			case NO_BT_FOUND:
-				message += getString(R.string.no_bt_error);
+				message += getString(R.string.bt_not_found);
 				break;
-			default:
-				message += getString(R.string.unknown_bt_error);
+			case UNKNOWN:
+				message += getString(R.string.unknown_error);
 				break;
 		}
 		

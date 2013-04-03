@@ -3,12 +3,13 @@
     <string name="app_name">ARCNS</string>
     	
 	<!-- bluetooth error message /-->
-	<string name="no_bt_error">No BlueTooth capabilities detected!</string>
-	<string name="unknown_bt_error">Unknown BlueTooth Error!</string>
-	
+	<string name="bt_not_found">No BlueTooth capabilities detected!</string>
+	<string name="unknown_error">Unknown Error!</string>
+	<string name="bt_enable_failed">BlueTooth must be enabled!</string>
+		
 	<!-- generic strings -->
 	<string name="ok">Okay</string>
+	<string name="exit">Exit</string>
 	<string name="input_msg_hint">Input Message</string>
 	<string name="send_btn_text">Send</string>
-	
 </resources>
