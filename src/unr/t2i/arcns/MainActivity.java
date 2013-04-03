@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -24,6 +25,20 @@ public class MainActivity extends Activity {
 		initBluetooth();
 	}
 	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.settings_menu, menu);
+		return true;
+	}
+	
+	
+	/** called once BlueTooth is enabled */
+	public void enableInterface()
+	{
+		
+	}
+	
 	// called when activity for result finishes
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
@@ -31,7 +46,9 @@ public class MainActivity extends Activity {
 		{
 			case REQUEST_ENABLE_BT:
 				// If BT isn't enabled ask again, if dialog is canceled then exit
-				if ( resultCode != Activity.RESULT_OK ) {
+				if ( resultCode == Activity.RESULT_OK ) {
+					enableInterface();
+				} else {
 					String message = getString(R.string.bt_enable_failed);
 					AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
 					final MainActivity myself = this;
@@ -67,6 +84,8 @@ public class MainActivity extends Activity {
 		if ( !btAdapter.isEnabled() ) {
 			Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);			
+		} else {
+			enableInterface();
 		}
 	}
 	
