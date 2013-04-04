@@ -8,10 +8,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 
 /*
  * Get the BluetoothAdapter
@@ -28,27 +27,30 @@ public class MainActivity extends Activity {
 	// Bluetooth Adapter, this gets set to the default (since there's only one) 
 	protected BluetoothAdapter btAdapter;
 	
-	
 	protected final String BT_ADAPTER = "unr.t2i.arcns.MainActivity.BT_ADAPTER";
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.activity_main);
-
-		// attach listener to send messge when Done is pressed 
+		
+		// attach listener to send message when Done is pressed 
 		EditText inputText = (EditText) findViewById(R.id.message_text);
-		inputText.setOnEditorActionListener(new OnEditorActionListener() {
-			
+		inputText.setImeActionLabel(getString(R.string.send), KeyEvent.KEYCODE_ENTER);
+		inputText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
 			@Override
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-				if (event.getAction() == KeyEvent.KEYCODE_ENTER) {
-					/*EditText inputText = (EditText) v;
-					TextView messageTerm = (TextView) findViewById(R.id.text_view);
-					messageTerm.setText(messageTerm.getText().toString() +
-								"\nSent    : " + inputText.getText().toString());
-					inputText.setText("");*/
+				if (actionId == EditorInfo.IME_NULL && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+					// intercept the key up event but don't write another method
+					// this prevents the keyboard from closing
+					if (v.getText().toString().length() > 0) {
+						TextView messageTerm = (TextView) findViewById(R.id.text_view);
+						messageTerm.setText(messageTerm.getText().toString() +
+							"\nSent    : " + v.getText().toString());
+						v.setText("");
+					}
+					return true;
 				}
-				return true;
+				return false;
 			}
 		});
 		
@@ -61,6 +63,7 @@ public class MainActivity extends Activity {
 		super.onCreateOptionsMenu(menu);
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.settings_menu, menu);
+		
 		return true;
 	}
 	

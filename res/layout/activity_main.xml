@@ -14,7 +14,6 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:gravity="bottom"
-        android:textIsSelectable="true"
         android:textSize="15sp" />
 
     <EditText
@@ -23,8 +22,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:ems="10"
         android:hint="@string/input_msg_hint"
         android:singleLine="true" />
-
+    
 </RelativeLayout>

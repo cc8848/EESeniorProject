@@ -35,14 +35,15 @@ public final class R {
         public static final int bt_not_found=0x7f040001;
         public static final int exit=0x7f040005;
         public static final int input_msg_hint=0x7f040006;
-        public static final int menu_bt_search=0x7f04000a;
-        public static final int menu_connect_pair=0x7f040009;
+        public static final int menu_bt_search=0x7f04000b;
+        public static final int menu_connect_pair=0x7f04000a;
         /**  popup menu /
          */
-        public static final int menu_settings=0x7f040008;
+        public static final int menu_settings=0x7f040009;
         /**  generic strings /
          */
         public static final int ok=0x7f040004;
+        public static final int send=0x7f040008;
         public static final int send_btn_text=0x7f040007;
         public static final int unknown_error=0x7f040002;
     }

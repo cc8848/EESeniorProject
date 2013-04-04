@@ -12,6 +12,7 @@
 	<string name="exit">Exit</string>
 	<string name="input_msg_hint">Input Message</string>
 	<string name="send_btn_text">Send</string>
+	<string name="send">Send</string>
 	
 	<!-- popup menu /-->
 	<string name="menu_settings">Settings</string>
