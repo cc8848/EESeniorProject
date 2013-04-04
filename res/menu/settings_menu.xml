@@ -6,5 +6,14 @@
 		android:orderInCategory="100"
 		android:showAsAction="never"
 		android:title="@string/menu_settings"/>
-
+	<item
+	    android:id="@+id/connect_pairs_menu"
+	    android:orderInCategory="200"
+	    android:showAsAction="never"
+	    android:title="@string/menu_connect_pair"/>
+	<item
+	    android:id="@+id/bt_search_menu"
+	    android:orderInCategory="300"
+	    android:showAsAction="never"
+	    android:title="@string/menu_bt_search"/>
 </menu>

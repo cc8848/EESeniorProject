@@ -6,27 +6,59 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
+
+/*
+ * Get the BluetoothAdapter
+ * Enable Bluetooth
+ * If connecting to a Bluetooth serial board then use SPP UUID 00001101-0000-1000-8000-00805F9B34FB
+ *  
+ */
 
 public class MainActivity extends Activity {
 
-	private enum ArcnsError {NO_BT_FOUND, UNKNOWN};
-
-	public final int REQUEST_ENABLE_BT = 1;
+	protected enum ArcnsError {NO_BT_FOUND, UNKNOWN};
+	protected final int REQUEST_ENABLE_BT = 1;
+	
+	// Bluetooth Adapter, this gets set to the default (since there's only one) 
+	protected BluetoothAdapter btAdapter;
+	
+	
+	protected final String BT_ADAPTER = "unr.t2i.arcns.MainActivity.BT_ADAPTER";
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.activity_main);
 
+		// attach listener to send messge when Done is pressed 
+		EditText inputText = (EditText) findViewById(R.id.message_text);
+		inputText.setOnEditorActionListener(new OnEditorActionListener() {
+			
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				if (event.getAction() == KeyEvent.KEYCODE_ENTER) {
+					/*EditText inputText = (EditText) v;
+					TextView messageTerm = (TextView) findViewById(R.id.text_view);
+					messageTerm.setText(messageTerm.getText().toString() +
+								"\nSent    : " + inputText.getText().toString());
+					inputText.setText("");*/
+				}
+				return true;
+			}
+		});
+		
 		// initialize BlueTooth
 		initBluetooth();
 	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.settings_menu, menu);
 		return true;
@@ -42,6 +74,7 @@ public class MainActivity extends Activity {
 	// called when activity for result finishes
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
+		super.onActivityResult(requestCode, resultCode, data);
 		switch (requestCode)
 		{
 			case REQUEST_ENABLE_BT:
@@ -74,7 +107,7 @@ public class MainActivity extends Activity {
 		
 	protected void initBluetooth() {
 		// Initialize the BlueTooth
-		BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
+		btAdapter = BluetoothAdapter.getDefaultAdapter();
 		if ( btAdapter == null ) {	
 			fatalError(ArcnsError.NO_BT_FOUND);
 			return;
@@ -88,23 +121,6 @@ public class MainActivity extends Activity {
 			enableInterface();
 		}
 	}
-	
-	public void sendBluetooth(String message) {
-		TextView view = (TextView) findViewById(R.id.text_view);
-		
-		String new_message = view.getText().toString() + "\nSent    : " + message;
-		view.setText(new_message);
-	}
-	
-	public void sendMessage(View view) {
-		EditText message_text = (EditText) findViewById(R.id.message_text);
-		String message = message_text.getText().toString();
-		
-		sendBluetooth(message);
-
-		message_text.setText("");
-	}
-	
 
 	/** Display message then exit app */
 	protected void fatalError(ArcnsError type) {
